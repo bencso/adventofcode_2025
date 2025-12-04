@@ -38,7 +38,6 @@ function textSearch(text) {
   // Megnézzük balról majd jobbról a szöveget sliceolással, és ha így alakítjuk ki a pattern-t
   const element = text.slice(0, textHalf);
   const elementHalf = text.slice(textHalf);
-  console.log(element+ " - "+elementHalf);
   // Nullával nem kezdödhet az elem, és ugye ha a pattern egyezik a szöveggel akkor jók vagyunk
   if (element[0] != "0" && elementHalf === element) {
     return parseInt(text);
