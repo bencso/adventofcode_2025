@@ -9,6 +9,7 @@ import { dayFiveOne } from "./day05/01/index.js";
 import { daySixOne } from "./day06/01/index.js";
 import { daySevenOne } from "./day07/01/index.js";
 import { dayEightOne } from "./day08/01/index.js";
+import { dayNineOne } from "./day09/01/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,3 +37,6 @@ console.log("\telső feladata: "+await daySevenOne(__dirname));
 
 console.log("-----NYOLCADIK NAP----");
 console.log("\telső feladata: "+await dayEightOne(__dirname));
+
+console.log("-----KILENCEDIK NAP----");
+console.log("\telső feladata: "+await dayNineOne(__dirname));

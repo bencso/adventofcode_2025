@@ -18,8 +18,19 @@ export async function dayEightOne(dir) {
   try {
     const text = await fs.readFile(dir + "/day08/01/input.txt", "utf8");
     const splitted = text.split("\n").filter(Boolean);
-    console.log(splitted);
+    const edges = [];
 
+    for (let i = 0; i < splitted.length; i++) {
+      for (let j = i + 1; j < splitted.length; j++) {
+        const [ax, ay, az] = splitted[i];
+        const [bx, by, bz] = splitted[j];
+
+        const dist = Math.hypot(ax - bx, ay - by);
+        edges.push({ i, j, dist });
+      }
+    }
+
+    edges.sort((a, b) => a.dist - b.dist);
 
     return 0;
   } catch (err) {
