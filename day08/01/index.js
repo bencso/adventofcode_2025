@@ -11,8 +11,30 @@ distance(1, 1, 2, 3); // ~2.2361
 
 hypot függvény => Euclidean distance számlálásra van
 
-szóval igazándiból azt kell csinálni hogy végig menni a koordinátákon azokon elvégezni a distancet és utána ezeket sorba állítani és megvan a közel esők listája
-majd utána a 3 legnagyobbat kivenni és megszorozni.
+szóval igazándiból azt kell csinálni hogy végig menni a koordinátákon azokon elvégezni a distancet és
+utána sorba állítani ezeken egy union find-ot kell elvégezni (ehhez segítséget kértem....)
+
+Union find:
+  - Tulajdonképpen összepárosítunk elemeket ugy hogy az szülő-gyerek kapcsolatban lesznek
+    array = [0, 0, 2, 2, 4, 4]
+
+    0: szűlője: 0
+    1: szűlője: 0
+    2: szűlője: 2
+    3: szűlője: 2
+    4: szűlője: 4
+    5: szűlője: 4
+
+    Áramkörök: [0,1], [2,3], [4,5] = 3 áramkör
+
+  - Kezdésnek mindeki a saját szülője (egyedi dobozok)
+  - Megkeressük a find-al a vezetőt a szűlőt: find(5) -> array[5] = 2 —> array[2] = 1 -> array[1] = 1 → Vissza: 1,
+  ezt pedig egy rekurzióval keressük a végéig
+  - majd ezeket uniozzuk azaz: összekötjük a dobozokat:
+    - megkeressük a két doboz vezetőjét. ha nem egyeznek akkor az egyik vezetőt a másik alá helyezzük
+              -> az összes doboz, amely edgeJ vezetésével volt, most edgeI vezetésével lesz
+  - ezek után az 1000 dobozon végig megyünk 
+  - ezt követően pedig az áramköröket megszámoljuk és összeszorozzuk az 3 legnagyobbat
 */
 export async function dayEightOne(dir) {
   try {
@@ -22,17 +44,67 @@ export async function dayEightOne(dir) {
 
     for (let i = 0; i < splitted.length; i++) {
       for (let j = i + 1; j < splitted.length; j++) {
-        const [ax, ay, az] = splitted[i];
-        const [bx, by, bz] = splitted[j];
+        const [ax, ay, az] = splitted[i].split(",").map(Number);
+        const [bx, by, bz] = splitted[j].split(",").map(Number);
 
-        const dist = Math.hypot(ax - bx, ay - by);
+        const dist = Math.hypot(ax - bx, ay - by, az - bz);
         edges.push({ i, j, dist });
       }
     }
 
     edges.sort((a, b) => a.dist - b.dist);
 
-    return 0;
+    const array = [];
+    for (let i = 0; i < splitted.length; i++) {
+      array[i] = i;
+    }
+
+    function find(x) {
+      if (array[x] !== x) {
+        array[x] = find(array[x]);
+      }
+      return array[x];
+    }
+
+    function union({ i, j }) {
+      const edgeI = find(i);
+      const edgeJ = find(j);
+
+      if (edgeI !== edgeJ) {
+        array[edgeJ] = edgeI;
+        return true;
+      }
+      return false;
+    }
+
+    for (let index = 0; index < 1000; index++) {
+      union({
+        i: edges[index].i,
+        j: edges[index].j,
+      });
+    }
+
+    const circuitSizes = [];
+
+    for (let i = 0; i < splitted.length; i++) {
+      const root = find(i);
+      if (!circuitSizes[root]) {
+        circuitSizes[root] = 0;
+      }
+      circuitSizes[root]++;
+    }
+
+    return circuitSizes
+      .filter((item) => {
+        return item !== 1;
+      })
+      .sort((a, b) => {
+        return b - a;
+      })
+      .slice(0, 3)
+      .reduce((acc, currentValue) => {
+        return acc * currentValue;
+      });
   } catch (err) {
     console.error(err);
   }
