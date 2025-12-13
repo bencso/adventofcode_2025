@@ -47,15 +47,59 @@ import fs from "fs/promises";
 export async function dayTwelveOne(dir) {
   try {
     const text = await fs.readFile(dir + "/day12/01/input.txt", "utf8");
+    const patterns = {};
+    const maps = [];
+    const amounts = [];
     text
       .split("\n\n")
-      .filter(Boolean).forEach((value)=>{
-        console.log("---");
-        console.log(value);
-        console.log("---");
+      .filter(Boolean)
+      .forEach((value) => {
+        const splitted = value.split("\n");
+        splitted.forEach((text) => {
+          if (/\b(\d{1,3})x(\d{1,3})/.test(text)) {
+            const [width, height] = text.split(":")[0].split("x");
+            const map = Array.from({ length: Number(height) }, () =>
+              Array.from({ length: Number(width) }, () => false)
+            );
+            maps.push(map);
+            amounts.push(text.split(":")[1].split(" ").filter(Boolean));
+          } else {
+            const lines = value.split("\n");
+            const indexLine = lines.shift();
+            const index = indexLine.split(":")[0];
+            const shape = [];
+            lines.forEach((line, row) => {
+              [...line].forEach((cell, col) => {
+                if (cell === "#") {
+                  shape.push([row, col]);
+                }
+              });
+            });
+
+            patterns[index] = shape;
+          }
+        });
       });
 
-    return 0;
+    function placeNext(darabIndex, map, patterns, amountArr) {
+      if (!map || !map[0]) return false;
+      if (darabIndex >= amountArr.length) return true;
+
+      const patternIndex = Object.keys(patterns)[darabIndex];
+      const pattern = patterns[patternIndex];
+      //TODO: Rekurzió
+
+      return false;
+    }
+
+    function patternTest(mapIndex) {
+      let map = maps[mapIndex].map((row) => [...row]);
+      placeNext(0, map, patterns, amounts[mapIndex]);
+    }
+
+    amounts.forEach((_, mapIndex) => {
+      patternTest(mapIndex);
+    });
   } catch (err) {
     console.error(err);
   }
