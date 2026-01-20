@@ -25,7 +25,6 @@ Az Advent of Code során gyakorolhatok:
 - Algoritmusok és adatszerkezetek
 - Problémamegoldás
 - Kód optimalizálás
-- Különböző programozási nyelvek
 
 
 ## 📄 Licensz
