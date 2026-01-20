@@ -21,7 +21,7 @@ Minden nap első részét oldottam meg, amely a napi kihívás első felét jele
 
 ## 🎓 Tanulási célok
 
-Az Advent of Code során gyakorolhatok:
+Az Advent of Code során gyakorolhattam:
 - Algoritmusok és adatszerkezetek
 - Problémamegoldás
 - Kód optimalizálás
